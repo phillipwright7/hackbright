@@ -1,4 +1,4 @@
-# Pivot Technonology School
+# Hackbright Academy
 
 Repository for all assigments
 
