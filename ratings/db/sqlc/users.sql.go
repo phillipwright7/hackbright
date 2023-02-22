@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -21,9 +20,9 @@ INSERT INTO users (
 `
 
 type CreateUserParams struct {
-	Username sql.NullString `json:"username"`
-	Password sql.NullString `json:"password"`
-	Email    sql.NullString `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -42,7 +41,7 @@ const deleteUser = `-- name: DeleteUser :exec
 DELETE FROM users WHERE username = $1
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, username sql.NullString) error {
+func (q *Queries) DeleteUser(ctx context.Context, username string) error {
 	_, err := q.db.ExecContext(ctx, deleteUser, username)
 	return err
 }
@@ -84,7 +83,7 @@ SELECT user_id, username, password, email FROM users
 WHERE username = $1 LIMIT 1
 `
 
-func (q *Queries) GetUserDetails(ctx context.Context, username sql.NullString) (User, error) {
+func (q *Queries) GetUserDetails(ctx context.Context, username string) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUserDetails, username)
 	var i User
 	err := row.Scan(

@@ -5,27 +5,27 @@
 package db
 
 import (
-	"database/sql"
+	"time"
 )
 
 type Movie struct {
-	MovieID     int32          `json:"movie_id"`
-	Title       sql.NullString `json:"title"`
-	Overview    sql.NullString `json:"overview"`
-	ReleaseDate sql.NullTime   `json:"release_date"`
-	PosterUrl   sql.NullString `json:"poster_url"`
+	MovieID     int32     `json:"movie_id"`
+	Title       string    `json:"title"`
+	Overview    string    `json:"overview"`
+	ReleaseDate time.Time `json:"release_date"`
+	PosterUrl   string    `json:"poster_url"`
 }
 
 type Rating struct {
-	RatingID int32         `json:"rating_id"`
-	MovieID  sql.NullInt32 `json:"movie_id"`
-	UserID   sql.NullInt32 `json:"user_id"`
-	Score    sql.NullInt32 `json:"score"`
+	RatingID int32 `json:"rating_id"`
+	MovieID  int32 `json:"movie_id"`
+	UserID   int32 `json:"user_id"`
+	Score    int32 `json:"score"`
 }
 
 type User struct {
-	UserID   int32          `json:"user_id"`
-	Username sql.NullString `json:"username"`
-	Password sql.NullString `json:"password"`
-	Email    sql.NullString `json:"email"`
+	UserID   int32  `json:"user_id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
 }

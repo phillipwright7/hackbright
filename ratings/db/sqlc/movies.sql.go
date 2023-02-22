@@ -7,7 +7,7 @@ package db
 
 import (
 	"context"
-	"database/sql"
+	"time"
 )
 
 const createMovie = `-- name: CreateMovie :one
@@ -22,10 +22,10 @@ INSERT INTO movies (
 `
 
 type CreateMovieParams struct {
-	Title       sql.NullString `json:"title"`
-	Overview    sql.NullString `json:"overview"`
-	ReleaseDate sql.NullTime   `json:"release_date"`
-	PosterUrl   sql.NullString `json:"poster_url"`
+	Title       string    `json:"title"`
+	Overview    string    `json:"overview"`
+	ReleaseDate time.Time `json:"release_date"`
+	PosterUrl   string    `json:"poster_url"`
 }
 
 func (q *Queries) CreateMovie(ctx context.Context, arg CreateMovieParams) (Movie, error) {
@@ -50,7 +50,7 @@ const deleteMovie = `-- name: DeleteMovie :exec
 DELETE FROM movies WHERE title = $1
 `
 
-func (q *Queries) DeleteMovie(ctx context.Context, title sql.NullString) error {
+func (q *Queries) DeleteMovie(ctx context.Context, title string) error {
 	_, err := q.db.ExecContext(ctx, deleteMovie, title)
 	return err
 }
@@ -93,7 +93,7 @@ SELECT movie_id, title, overview, release_date, poster_url FROM movies
 WHERE title = $1
 `
 
-func (q *Queries) GetMovieDetails(ctx context.Context, title sql.NullString) (Movie, error) {
+func (q *Queries) GetMovieDetails(ctx context.Context, title string) (Movie, error) {
 	row := q.db.QueryRowContext(ctx, getMovieDetails, title)
 	var i Movie
 	err := row.Scan(

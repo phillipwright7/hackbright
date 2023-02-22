@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createRating = `-- name: CreateRating :one
@@ -21,9 +20,9 @@ INSERT INTO ratings (
 `
 
 type CreateRatingParams struct {
-	MovieID sql.NullInt32 `json:"movie_id"`
-	UserID  sql.NullInt32 `json:"user_id"`
-	Score   sql.NullInt32 `json:"score"`
+	MovieID int32 `json:"movie_id"`
+	UserID  int32 `json:"user_id"`
+	Score   int32 `json:"score"`
 }
 
 func (q *Queries) CreateRating(ctx context.Context, arg CreateRatingParams) (Rating, error) {
@@ -44,8 +43,8 @@ WHERE movie_id = $1 AND user_id = $2
 `
 
 type DeleteRatingParams struct {
-	MovieID sql.NullInt32 `json:"movie_id"`
-	UserID  sql.NullInt32 `json:"user_id"`
+	MovieID int32 `json:"movie_id"`
+	UserID  int32 `json:"user_id"`
 }
 
 func (q *Queries) DeleteRating(ctx context.Context, arg DeleteRatingParams) error {
@@ -58,15 +57,15 @@ SELECT score FROM ratings
 WHERE movie_id = $1
 `
 
-func (q *Queries) GetMovieRatings(ctx context.Context, movieID sql.NullInt32) ([]sql.NullInt32, error) {
+func (q *Queries) GetMovieRatings(ctx context.Context, movieID int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getMovieRatings, movieID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []sql.NullInt32
+	var items []int32
 	for rows.Next() {
-		var score sql.NullInt32
+		var score int32
 		if err := rows.Scan(&score); err != nil {
 			return nil, err
 		}
@@ -87,8 +86,8 @@ WHERE movie_id = $1 AND user_id = $2
 `
 
 type GetRatingDetailsParams struct {
-	MovieID sql.NullInt32 `json:"movie_id"`
-	UserID  sql.NullInt32 `json:"user_id"`
+	MovieID int32 `json:"movie_id"`
+	UserID  int32 `json:"user_id"`
 }
 
 func (q *Queries) GetRatingDetails(ctx context.Context, arg GetRatingDetailsParams) (Rating, error) {
@@ -108,15 +107,15 @@ SELECT score FROM ratings
 WHERE user_id = $1
 `
 
-func (q *Queries) GetUserRatings(ctx context.Context, userID sql.NullInt32) ([]sql.NullInt32, error) {
+func (q *Queries) GetUserRatings(ctx context.Context, userID int32) ([]int32, error) {
 	rows, err := q.db.QueryContext(ctx, getUserRatings, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []sql.NullInt32
+	var items []int32
 	for rows.Next() {
-		var score sql.NullInt32
+		var score int32
 		if err := rows.Scan(&score); err != nil {
 			return nil, err
 		}
@@ -139,9 +138,9 @@ RETURNING rating_id, movie_id, user_id, score
 `
 
 type UpdateRatingParams struct {
-	Score   sql.NullInt32 `json:"score"`
-	MovieID sql.NullInt32 `json:"movie_id"`
-	UserID  sql.NullInt32 `json:"user_id"`
+	Score   int32 `json:"score"`
+	MovieID int32 `json:"movie_id"`
+	UserID  int32 `json:"user_id"`
 }
 
 func (q *Queries) UpdateRating(ctx context.Context, arg UpdateRatingParams) (Rating, error) {
