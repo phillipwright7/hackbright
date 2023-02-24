@@ -15,8 +15,8 @@ CREATE TABLE "movies" (
 
 CREATE TABLE "ratings" (
   "rating_id" serial PRIMARY KEY,
-  "movie_id" int NOT NULL,
-  "user_id" int NOT NULL,
+  "movie_id" int,
+  "user_id" int,
   "score" int NOT NULL
 );
 

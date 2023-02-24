@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
@@ -22,26 +22,33 @@ var testQueries *Queries
 
 func TestMain(m *testing.M) {
 
-	// Finds test_ratings and dropping if exists
-	dropdb := exec.Command("dropdb", "--if-exists", "test_ratings")
-	if err := dropdb.Run(); err != nil {
-		log.Fatal(err)
+	cmd := exec.Command("dropdb", "--if-exists", "test_ratings")
+	if err := cmd.Run(); err != nil {
+		log.Fatalf("dropdb failed: %v", err)
 	}
 
-	// Opens connection to test_ratings
-	db, err := sql.Open(driverName, dataSourceName)
+	cmd = exec.Command("createdb", "test_ratings")
+	if err := cmd.Run(); err != nil {
+		log.Fatalf("createdb failed: %v", err)
+	}
+
+	mi, err := migrate.New(
+		"file://../migrations",
+		dataSourceName)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to create new migrate instance: %v", err)
 	}
 
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
-	mi, err := migrate.NewWithDatabaseInstance(
-		"file:///db/migrations",
-		"postgres", driver)
-	mi.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
+	if err = mi.Up(); err != nil {
+		log.Fatalf("failed to migrate up: %v", err)
+	}
 
-	// Question: why does db work here? 👇
-	testQueries = New(db)
+	testdb, err := sql.Open(driverName, dataSourceName)
+	if err != nil {
+		log.Fatalf("failed to connect to database: %v", err)
+	}
+
+	testQueries = New(testdb)
 
 	os.Exit(m.Run())
 }

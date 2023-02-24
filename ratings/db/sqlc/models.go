@@ -5,6 +5,7 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -17,10 +18,10 @@ type Movie struct {
 }
 
 type Rating struct {
-	RatingID int32 `json:"rating_id"`
-	MovieID  int32 `json:"movie_id"`
-	UserID   int32 `json:"user_id"`
-	Score    int32 `json:"score"`
+	RatingID int32         `json:"rating_id"`
+	MovieID  sql.NullInt32 `json:"movie_id"`
+	UserID   sql.NullInt32 `json:"user_id"`
+	Score    int32         `json:"score"`
 }
 
 type User struct {

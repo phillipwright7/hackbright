@@ -22,7 +22,7 @@ DELETE FROM ratings
 WHERE movie_id = $1 AND user_id = $2;
 
 -- name: GetMovieRatings :many
-SELECT score FROM ratings
+SELECT * FROM ratings
 WHERE movie_id = $1;
 
 -- name: GetUserRatings :many
