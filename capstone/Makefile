@@ -61,4 +61,4 @@ getsale:
 updatesale:
 	curl -i -X PUT localhost:8080/updatesale/$(ID) -d '{"sale_id": $(ID), "car_id":{ "Int32": 9,"Valid": true }, "owner_id":{ "Int32": 5,"Valid": true }}'
 
-.PHONY: createdb dropdb migrateup migratedown sqlc runserver createcar deletecar getcars getcar createowner deleteowner getowners getowner createsale deletesale getsales getsale
+.PHONY: createdb dropdb migrateup migratedown sqlc runserver createcar deletecar getcars getcar updatecar createowner deleteowner getowners getowner updateowner createsale deletesale getsales getsale updatesale
