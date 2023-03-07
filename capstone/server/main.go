@@ -159,6 +159,7 @@ func getAllCarsHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(500)
+			return
 		}
 
 		if err := json.NewEncoder(w).Encode(cars); err != nil {
@@ -368,6 +369,7 @@ func getAllOwnersHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(500)
+			return
 		}
 
 		if err := json.NewEncoder(w).Encode(owners); err != nil {
@@ -577,6 +579,7 @@ func getAllSalesHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(500)
+			return
 		}
 
 		if err := json.NewEncoder(w).Encode(sales); err != nil {
