@@ -56,7 +56,7 @@ func openDatabase(w http.ResponseWriter) error {
 }
 
 func createCarHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
+	if r.Method == http.MethodPost {
 		w.Header().Set("Content-Type", "application/json")
 
 		var c db.CreateCarParams
@@ -265,7 +265,7 @@ func updateCarHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createOwnerHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
+	if r.Method == http.MethodPost {
 		w.Header().Set("Content-Type", "application/json")
 
 		var o db.CreateOwnerParams
@@ -474,7 +474,7 @@ func updateOwnerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createSaleHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
+	if r.Method == http.MethodPost {
 		w.Header().Set("Content-Type", "application/json")
 
 		var s db.CreateSaleParams
