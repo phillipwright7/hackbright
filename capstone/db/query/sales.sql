@@ -16,3 +16,8 @@ SELECT * FROM sales;
 -- name: DeleteSale :exec
 DELETE FROM sales
 WHERE sale_id = $1;
+
+-- name: UpdateSale :exec
+UPDATE sales 
+SET car_id = $2, owner_id = $3
+WHERE sale_id = $1;

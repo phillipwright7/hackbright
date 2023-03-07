@@ -20,3 +20,8 @@ SELECT * FROM cars;
 -- name: DeleteCar :exec
 DELETE FROM cars 
 WHERE car_id = $1;
+
+-- name: UpdateCar :exec
+UPDATE cars
+SET make = $2, model = $3, price = $4, transmission = $5, trim_level = $6, color = $7
+WHERE car_id = $1;

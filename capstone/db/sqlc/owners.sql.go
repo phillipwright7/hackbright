@@ -105,3 +105,28 @@ func (q *Queries) GetOwnerDetails(ctx context.Context, ownerID int32) (Owner, er
 	)
 	return i, err
 }
+
+const updateOwner = `-- name: UpdateOwner :exec
+UPDATE owners
+SET first_name = $2, last_name = $3, phone_number = $4, email = $5
+WHERE owner_id = $1
+`
+
+type UpdateOwnerParams struct {
+	OwnerID     int32  `json:"owner_id"`
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
+	PhoneNumber int32  `json:"phone_number"`
+	Email       string `json:"email"`
+}
+
+func (q *Queries) UpdateOwner(ctx context.Context, arg UpdateOwnerParams) error {
+	_, err := q.db.ExecContext(ctx, updateOwner,
+		arg.OwnerID,
+		arg.FirstName,
+		arg.LastName,
+		arg.PhoneNumber,
+		arg.Email,
+	)
+	return err
+}

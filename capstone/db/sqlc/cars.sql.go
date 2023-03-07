@@ -117,3 +117,32 @@ func (q *Queries) GetCarDetails(ctx context.Context, carID int32) (Car, error) {
 	)
 	return i, err
 }
+
+const updateCar = `-- name: UpdateCar :exec
+UPDATE cars
+SET make = $2, model = $3, price = $4, transmission = $5, trim_level = $6, color = $7
+WHERE car_id = $1
+`
+
+type UpdateCarParams struct {
+	CarID        int32  `json:"car_id"`
+	Make         string `json:"make"`
+	Model        string `json:"model"`
+	Price        string `json:"price"`
+	Transmission string `json:"transmission"`
+	TrimLevel    string `json:"trim_level"`
+	Color        string `json:"color"`
+}
+
+func (q *Queries) UpdateCar(ctx context.Context, arg UpdateCarParams) error {
+	_, err := q.db.ExecContext(ctx, updateCar,
+		arg.CarID,
+		arg.Make,
+		arg.Model,
+		arg.Price,
+		arg.Transmission,
+		arg.TrimLevel,
+		arg.Color,
+	)
+	return err
+}

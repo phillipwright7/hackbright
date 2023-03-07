@@ -21,6 +21,9 @@ type Querier interface {
 	GetCarDetails(ctx context.Context, carID int32) (Car, error)
 	GetOwnerDetails(ctx context.Context, ownerID int32) (Owner, error)
 	GetSaleDetails(ctx context.Context, saleID int32) (Sale, error)
+	UpdateCar(ctx context.Context, arg UpdateCarParams) error
+	UpdateOwner(ctx context.Context, arg UpdateOwnerParams) error
+	UpdateSale(ctx context.Context, arg UpdateSaleParams) error
 }
 
 var _ Querier = (*Queries)(nil)

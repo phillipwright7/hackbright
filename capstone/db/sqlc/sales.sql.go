@@ -79,3 +79,20 @@ func (q *Queries) GetSaleDetails(ctx context.Context, saleID int32) (Sale, error
 	err := row.Scan(&i.SaleID, &i.CarID, &i.OwnerID)
 	return i, err
 }
+
+const updateSale = `-- name: UpdateSale :exec
+UPDATE sales 
+SET car_id = $2, owner_id = $3
+WHERE sale_id = $1
+`
+
+type UpdateSaleParams struct {
+	SaleID  int32         `json:"sale_id"`
+	CarID   sql.NullInt32 `json:"car_id"`
+	OwnerID sql.NullInt32 `json:"owner_id"`
+}
+
+func (q *Queries) UpdateSale(ctx context.Context, arg UpdateSaleParams) error {
+	_, err := q.db.ExecContext(ctx, updateSale, arg.SaleID, arg.CarID, arg.OwnerID)
+	return err
+}

@@ -28,14 +28,17 @@ func main() {
 	http.HandleFunc("/deletecar/", deleteCarHandler)
 	http.HandleFunc("/getcars", getAllCarsHandler)
 	http.HandleFunc("/getcar/", getCarDetailsHandler)
+	http.HandleFunc("/updatecar/", updateCarHandler)
 	http.HandleFunc("/createowner", createOwnerHandler)
 	http.HandleFunc("/deleteowner/", deleteOwnerHandler)
 	http.HandleFunc("/getowners", getAllOwnersHandler)
 	http.HandleFunc("/getowner/", getOwnerDetailsHandler)
+	http.HandleFunc("/updateowner/", updateOwnerHandler)
 	http.HandleFunc("/createsale", createSaleHandler)
 	http.HandleFunc("/deletesale/", deleteSaleHandler)
 	http.HandleFunc("/getsales", getAllSalesHandler)
 	http.HandleFunc("/getsale/", getSaleDetailsHandler)
+	http.HandleFunc("/updatesale/", updateSaleHandler)
 
 	log.Printf("Listening on port %s", port)
 	log.Fatal(http.ListenAndServe(port, nil))
@@ -204,6 +207,63 @@ func getCarDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func updateCarHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPut {
+		w.Header().Set("Content-Type", "application/json")
+
+		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/updatecar/"))
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(400)
+			return
+		}
+
+		var c db.UpdateCarParams
+
+		if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+			log.Println(err)
+			w.WriteHeader(400)
+			return
+		}
+		if c == (db.UpdateCarParams{}) {
+			log.Println(errors.New("error: nil struct"))
+			w.WriteHeader(400)
+			return
+		}
+
+		defer r.Body.Close()
+
+		if err := openDatabase(w); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		if err := queries.UpdateCar(context.Background(), c); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		car, err := queries.GetCarDetails(context.Background(), int32(id))
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		payload := car.Model + " updated in database."
+
+		if err := json.NewEncoder(w).Encode(payload); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+	} else {
+		w.WriteHeader(400)
+	}
+}
+
 func createOwnerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		w.Header().Set("Content-Type", "application/json")
@@ -356,6 +416,63 @@ func getOwnerDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func updateOwnerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPut {
+		w.Header().Set("Content-Type", "application/json")
+
+		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/updateowner/"))
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(400)
+			return
+		}
+
+		var o db.UpdateOwnerParams
+
+		if err := json.NewDecoder(r.Body).Decode(&o); err != nil {
+			log.Println(err)
+			w.WriteHeader(400)
+			return
+		}
+		if o == (db.UpdateOwnerParams{}) {
+			log.Println(errors.New("error: nil struct"))
+			w.WriteHeader(400)
+			return
+		}
+
+		defer r.Body.Close()
+
+		if err := openDatabase(w); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		if err := queries.UpdateOwner(context.Background(), o); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		owner, err := queries.GetOwnerDetails(context.Background(), int32(id))
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		payload := owner.FirstName + " " + owner.LastName + " updated in database."
+
+		if err := json.NewEncoder(w).Encode(payload); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+	} else {
+		w.WriteHeader(400)
+	}
+}
+
 func createSaleHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		w.Header().Set("Content-Type", "application/json")
@@ -499,6 +616,63 @@ func getSaleDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if err := json.NewEncoder(w).Encode(sale); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+	} else {
+		w.WriteHeader(400)
+	}
+}
+
+func updateSaleHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPut {
+		w.Header().Set("Content-Type", "application/json")
+
+		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/updatesale/"))
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(400)
+			return
+		}
+
+		var s db.UpdateSaleParams
+
+		if err := json.NewDecoder(r.Body).Decode(&s); err != nil {
+			log.Println(err)
+			w.WriteHeader(400)
+			return
+		}
+		if s == (db.UpdateSaleParams{}) {
+			log.Println(errors.New("error: nil struct"))
+			w.WriteHeader(400)
+			return
+		}
+
+		defer r.Body.Close()
+
+		if err := openDatabase(w); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		if err := queries.UpdateSale(context.Background(), s); err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		sale, err := queries.GetSaleDetails(context.Background(), int32(id))
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		payload := "Sale ID " + fmt.Sprint(sale.SaleID) + " updated in database."
+
+		if err := json.NewEncoder(w).Encode(payload); err != nil {
 			log.Println(err)
 			w.WriteHeader(500)
 			return
