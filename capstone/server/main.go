@@ -106,7 +106,7 @@ func deleteCarHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/deletecar/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -179,7 +179,7 @@ func getCarDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/getcar/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -215,7 +215,7 @@ func updateCarHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/updatecar/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -316,7 +316,7 @@ func deleteOwnerHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/deleteowner/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -389,7 +389,7 @@ func getOwnerDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/getowner/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -425,7 +425,7 @@ func updateOwnerHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/updateowner/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -526,7 +526,7 @@ func deleteSaleHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/deletesale/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -599,7 +599,7 @@ func getSaleDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/getsale/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
@@ -635,7 +635,7 @@ func updateSaleHandler(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/updatesale/"))
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(400)
+			w.WriteHeader(500)
 			return
 		}
 
